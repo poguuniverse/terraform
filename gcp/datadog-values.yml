@@ -1,0 +1,79 @@
+targetSystem: linux
+datadog:
+  apiKey: 1d56d5696c0ab18dd37b595722ec71fe
+  appKey: 85a15c79736f77906e3844185187fb2b404bdf20
+  site: datadoghq.eu
+  clusterName: default-cluster
+  logs:
+    enabled: true
+    containerCollectAll: true
+  
+  # Enable the new `kubernetes_state_core` check.
+  kubeStateMetricsCore:
+    enabled: true
+  # Avoid deploying kube-state-metrics chart.
+  # The new `kubernetes_state_core` doesn't require to deploy the kube-state-metrics anymore.
+  kubeStateMetricsEnabled: false
+  ignoreAutoConfig:
+     - cilium
+  apm:
+    socketEnabled: true
+    portEnabled: true
+    enabled: true
+
+clusterChecksRunner:
+  enabled: true
+clusterAgent:
+  enabled: true
+  nodeSelector:
+    cloud.google.com/compute-class: "Scale-Out"
+  confd:
+    postgres.yaml: |-
+        cluster_check: true
+        init_config:
+        instances:
+           - dbm: true
+             host: '<INSTANCE_ADDRESS>'
+             port: 5432
+             username: datadog
+             password: '<PASSWORD>'
+             gcp:
+              project_id: '<PROJECT_ID>'
+              instance_id: '<INSTANCE_ID>'
+
+agents:
+  priorityClassName: high-priority
+  containers:
+    agent:
+      # resources for the Agent container
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+
+    traceAgent:
+      # resources for the Trace Agent container
+      resources:
+        requests:
+          cpu: 100m
+          memory: 200Mi
+        limits:
+          cpu: 100m
+          memory: 200Mi
+
+    processAgent:
+      # resources for the Process Agent container
+      resources:
+        requests:
+          cpu: 100m
+          memory: 200Mi
+        limits:
+          cpu: 100m
+          memory: 200Mi
+
+providers:
+  gke:
+    autopilot: true

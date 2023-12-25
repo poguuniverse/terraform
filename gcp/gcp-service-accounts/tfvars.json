@@ -1,0 +1,6 @@
+{
+    "gcp_projectid" : "soy-enterprise-306809",
+    "service_account_id" : "terraformadmin",
+    "service_account_name" : "Terraform Admin",
+    "iam_role" : ["roles/editor"]
+}
