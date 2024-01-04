@@ -1,51 +1,126 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Image Upload Form</title>
-</head>
-<body>
-  <h1>Upload Your Image</h1>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="fileInput" accept="image/*" required>
-    <input type="submit" value="Upload">
-  </form>
-
-  <script>
-    document.getElementById('uploadForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-
-      if (!file) {
-        alert('Please select an image file.');
-        return;
+  <head>
+    <title>Image Upload Form</title>
+  </head>
+  <body>
+    <h1>Upload Your Image</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" id="fileInput" accept="image/*" required />
+      <input type="submit" value="Upload" />
+    </form>
+    </br>
+    <b>Base64 Encoded</b>
+    <br></br>
+    <form id="files">
+      <input type="file" id="imageid" name="insuranceimg" />
+      <button type="button" onclick="onUploadClick()">Upload</button>
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      function getBase64(file, callback) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          callback(reader.result);
+        };
+        reader.onerror = function (error) {
+          alert("Error: ", error);
+          callback(undefined);
+        };
       }
 
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const endpointUrl = 'https://yib2bj4lj3.execute-api.us-east-2.amazonaws.com/default/my-lambda-function'; // Replace with your API Gateway endpoint
-
-      fetch(endpointUrl, {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+      function onUploadClick() {
+        var allowed_file_extension = ["jpg", "jpeg", "png"];
+        var fileDiv = document.querySelector('#files > input[type="file"]');
+        var file = fileDiv.files[0];
+        if (file == undefined) {
+          alert("Please choose a file");
+          return;
         }
-        return response.json();
-      })
-      .then(data => {
-        // Display the claimID from the response as an alert
-        alert('Claim ID: ' + data.claimId);
-      })
-      .catch(error => {
-        console.error('There was an error:', error);
-        alert('Image upload failed. Please try again.');
-      });
-    });
-  </script>
-</body>
+        var filename = $('#files > input[type="file"]').val();
+        var file_format_found = false;
+        for (var i = 0; i < allowed_file_extension.length; i++) {
+          if (filename.endsWith(allowed_file_extension[i])) {
+            file_format_found = true;
+          }
+        }
+        if (!file_format_found) {
+          alert(
+            "File name should end with " + allowed_file_extension.join(",")
+          );
+          return;
+        }
+        getBase64(file, base64data);
+      }
+
+      function base64data(data) {
+        if (data != undefined) {
+          const endpointUrl =
+            "https://yib2bj4lj3.execute-api.us-east-2.amazonaws.com/default/my-lambda-function"; // Replace with your API Gateway endpoint
+          
+          fetch(endpointUrl, {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },        
+            body: JSON.stringify({"data":data}),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Display the claimID from the response as an alert
+              alert("Claim ID: " + data.claimId);
+            })
+            .catch((error) => {
+              console.error("There was an error:", error);
+              alert("Image upload failed. Please try again.");
+            });
+        }
+      }
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const fileInput = document.getElementById("fileInput");
+          const file = fileInput.files[0];
+
+          if (!file) {
+            alert("Please select an image file.");
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("image", file);
+
+          const endpointUrl =
+            "https://yib2bj4lj3.execute-api.us-east-2.amazonaws.com/default/my-lambda-function"; // Replace with your API Gateway endpoint
+
+          fetch(endpointUrl, {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              // Display the claimID from the response as an alert
+              alert("Claim ID: " + data.claimId);
+            })
+            .catch((error) => {
+              console.error("There was an error:", error);
+              alert("Image upload failed. Please try again.");
+            });
+        });
+    </script>
+  </body>
 </html>
