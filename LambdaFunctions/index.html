@@ -19,10 +19,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       function getBase64(file, callback) {
+        
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function () {
-          callback(reader.result);
+          callback(reader.result, file.type);
         };
         reader.onerror = function (error) {
           alert("Error: ", error);
@@ -54,10 +55,10 @@
         getBase64(file, base64data);
       }
 
-      function base64data(data) {
+      function base64data(data, filetype) {
         if (data != undefined) {
 
-          var test = true;
+          var test = false;
           if(test){
             console.log(data)
             return
@@ -72,7 +73,7 @@
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },        
-            body: JSON.stringify({"data":data}),
+            body: JSON.stringify({"type":filetype,"data":data}),
           })
             .then((response) => {
               if (!response.ok) {

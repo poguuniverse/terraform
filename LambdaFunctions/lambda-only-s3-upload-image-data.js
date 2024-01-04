@@ -11,14 +11,15 @@ const s3 = new S3();
 const handler = async (event) => {
     try {
         console.log('Received event:', JSON.stringify(event));
-        const data = event.data
+        const data = event.data;
+        const data_type = event.type;
         var buffer = Buffer.from(data.replace(/^data:image\/\w+;base64,/, ""),'base64')
         const s3FileName = "claimInt.png";
         const params = {
             Bucket: 'insurance-claims-app',
             Key: s3FileName,
             Body: buffer,
-            ContentType: 'image/png'
+            ContentType: data_type
         };
         console.log('Uploading file to S3:', s3FileName);
         await s3.putObject(params);
