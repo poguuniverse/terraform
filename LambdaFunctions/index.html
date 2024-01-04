@@ -56,6 +56,13 @@
 
       function base64data(data) {
         if (data != undefined) {
+
+          var test = true;
+          if(test){
+            console.log(data)
+            return
+          }
+
           const endpointUrl =
             "https://yib2bj4lj3.execute-api.us-east-2.amazonaws.com/default/my-lambda-function"; // Replace with your API Gateway endpoint
           
