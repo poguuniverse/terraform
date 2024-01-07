@@ -77,7 +77,7 @@ const handler = async (event) => {
 
 
          const dBcommand = new PutCommand({
-            TableName: 'insurance-claim-app',
+            TableName: 'claim-details',
             Item: {
                 claimID: "claimId",
                 imageUrl: "s3FileName", // Assuming you want to store the S3 file name as imageUrl

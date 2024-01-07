@@ -1,9 +1,9 @@
-resource "aws_s3_bucket" "site" {
+resource "aws_s3_bucket" "claims_bucket" {
   bucket = "claims-app-bucket-cloudadvocate"
 }
 
-resource "aws_s3_bucket_public_access_block" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_public_access_block" "claims_bucket" {
+  bucket = aws_s3_bucket.claims_bucket.id
 
   block_public_acls       = false
   block_public_policy     = false
@@ -11,8 +11,8 @@ resource "aws_s3_bucket_public_access_block" "site" {
   restrict_public_buckets = false
 }
 
-resource "aws_s3_bucket_website_configuration" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_website_configuration" "claims_bucket" {
+  bucket = aws_s3_bucket.claims_bucket.id
 
   index_document {
     suffix = "index.html"
@@ -23,25 +23,25 @@ resource "aws_s3_bucket_website_configuration" "site" {
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_ownership_controls" "claims_bucket" {
+  bucket = aws_s3_bucket.claims_bucket.id
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_s3_bucket_acl" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_acl" "claims_bucket" {
+  bucket = aws_s3_bucket.claims_bucket.id
 
   acl = "public-read"
   depends_on = [
-    aws_s3_bucket_ownership_controls.site,
-    aws_s3_bucket_public_access_block.site
+    aws_s3_bucket_ownership_controls.claims_bucket,
+    aws_s3_bucket_public_access_block.claims_bucket
   ]
 }
 
-resource "aws_s3_bucket_policy" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_policy" "claims_bucket" {
+  bucket = aws_s3_bucket.claims_bucket.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -52,14 +52,14 @@ resource "aws_s3_bucket_policy" "site" {
         Principal = "*"
         Action    = "s3:GetObject"
         Resource = [
-          aws_s3_bucket.site.arn,
-          "${aws_s3_bucket.site.arn}/*",
+          aws_s3_bucket.claims_bucket.arn,
+          "${aws_s3_bucket.claims_bucket.arn}/*",
         ]
       },
     ]
   })
 
   depends_on = [
-    aws_s3_bucket_public_access_block.site
+    aws_s3_bucket_public_access_block.claims_bucket
   ]
 }
