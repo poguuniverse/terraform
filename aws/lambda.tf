@@ -20,7 +20,7 @@ resource "aws_iam_role" "lambda_exec_role" {
   # Define policy here if needed
 }
 
-data "aws_iam_policy_document" "lambda_administrator_policy" {
+data "aws_iam_policy_document" "lambda_administrator" {
   statement {
     effect = "Allow"
 
@@ -28,6 +28,18 @@ data "aws_iam_policy_document" "lambda_administrator_policy" {
 
     resources = ["*"]
   }
+}
+
+resource "aws_iam_policy" "lambda_administrator" {
+  name        = "lambda-administrator"
+  description = "lambda administrator"
+  policy      = data.aws_iam_policy_document.lambda_administrator.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "lambda_administrator_policy" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = aws_iam_policy.lambda_administrator.arn
 }
 
 data "archive_file" "lambda_1" {
@@ -47,7 +59,7 @@ resource "null_resource" "lambda_1" {
 
   provisioner "local-exec" {
     command = <<EOF
-    sleep 2
+    npm init
     EOF
 
     working_dir = "${path.module}/uploadClaimToS3"
@@ -83,7 +95,7 @@ resource "null_resource" "lambda_2" {
 
   provisioner "local-exec" {
     command = <<EOF
-    sleep 2
+    sleep 100
     EOF
 
     working_dir = "${path.module}/ProcessClaims"
