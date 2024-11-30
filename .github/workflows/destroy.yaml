@@ -1,4 +1,4 @@
-name: provision infrastructure on creation
+name: provision infrastructure - destroy
 on:
   workflow_dispatch:
 permissions:
