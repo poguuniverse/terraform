@@ -13,11 +13,15 @@ terraform {
       version = "~> 3.0"
     }
   }
+  backend "gcs" {
+    bucket = " test-bucket-124452323"
+    prefix = "terraform/sample"
+  }
 }
 
 /*
   backend "gcs" {
-    bucket = "multicloudtf"
+    bucket = " test-bucket-124452323"
     prefix = "terraform/sample"
   }
 */
