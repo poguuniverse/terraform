@@ -14,7 +14,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = " test-bucket-124452323"
+    bucket = "cloudadv-terraform-state-bucket"
     prefix = "terraform/sample"
   }
 }
