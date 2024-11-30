@@ -1,3 +1,3 @@
 #!/bin/bash
 
-terraform apply -var-file=./envs/dev.tfvars
+terraform apply --auto-approve -var-file=./envs/dev.tfvars
