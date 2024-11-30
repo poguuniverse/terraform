@@ -1,3 +1,3 @@
 #!/bin/bash
 
-terraform apply -var-file=./envs/dev.tfvars.json
+terraform apply -var-file=./envs/dev.tfvars

@@ -1,3 +1,4 @@
 #!/bin/bash
 
-terraform plan -var-file=./envs/dev.tfvars.json
+terraform init -var-file=./envs/dev.tfvars
+terraform plan -var-file=./envs/dev.tfvars

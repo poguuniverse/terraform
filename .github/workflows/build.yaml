@@ -17,7 +17,12 @@ jobs:
         workload_identity_provider: 'projects/540422861159/locations/global/workloadIdentityPools/devops-pool/providers/github-provider'
         service_account: 'sa-devops-course@youtube-demo-255723.iam.gserviceaccount.com'
     
-    - name: 'Access secret'
-      run: env
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: terraform init
+      run: cd gcp/sample && ./plan.sh
+    
+    - name: terraform plan
+      run: cd gcp/sample && ./apply.sh
 
 

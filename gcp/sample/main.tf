@@ -13,11 +13,14 @@ terraform {
       version = "~> 3.0"
     }
   }
+}
+
+/*
   backend "gcs" {
     bucket = "multicloudtf"
     prefix = "terraform/sample"
   }
-}
+*/
 
 module "vpc" {
   source = "./modules/vpc"
@@ -25,8 +28,9 @@ module "vpc" {
   vpc_name = var.vpc_name
 }
 
+/*
 module "compute" {
   source = "./modules/compute"
   project_id = var.project_id
   network_id = module.vpc.network_id
-}
+}*/
