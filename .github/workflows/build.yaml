@@ -1,6 +1,10 @@
 name: provision infrastructure on creation
 on:
   workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 jobs:
   maven-build:
     runs-on: ubuntu-latest
