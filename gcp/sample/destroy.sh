@@ -1,3 +1,3 @@
 #!/bin/bash
 
-terraform destroy -var-file=./envs/dev.tfvars
+terraform apply -destroy -var-file=./envs/dev.tfvars
