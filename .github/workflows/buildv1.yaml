@@ -15,6 +15,7 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         project_id: 'youtube-demo-255723'
+        token_format: 'access_token'
         workload_identity_provider: 'projects/540422861159/locations/global/workloadIdentityPools/devops-pool/providers/github-direct-provider'
     
     - uses: hashicorp/setup-terraform@v3
